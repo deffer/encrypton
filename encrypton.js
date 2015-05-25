@@ -23,29 +23,59 @@ app.controller("myEncrCtrl", function($scope, $timeout) {
 		var p = new BigInteger(pHex, 16);
 		var g1 = new BigInteger("02", 16);
 		$scope.lines.push({message: "Given p = 1536 bits prime and g1 = "+g1.toString(10), descr: pHex});
+		$scope.lines.push({message: "Alice picks random exponent a2...", descr: ""});
 		$timeout(function(){
-			console.log("2");
-			$scope.lines.push({message: "Alice a2 = random exponent", descr: ""});
+			console.log("a2");
 			a2 = new BigInteger(1536,1,new SecureRandom());
 			var str = a2.toString(16);
-			$scope.lines.push({message: "Alice a2 = random "+ str.substring(0,10)+"...", descr: linebrk(str, 64)});
-			//$scope.$apply();
+			$scope.lines.push({message: "Alice a2 = "+ str.substring(0,10)+"...", descr: linebrk(str, 64)});
+			$scope.lines.push({message: "Alice picks random exponent a3...", descr: ""});
 		}, 10).then(function(){
-			console.log("3");
-			$scope.lines.push({message: "Alice a3 = random exponent", descr: ""});			
+			console.log("a3");
 			a3 = new BigInteger(1536,1,new SecureRandom());
 			str = a3.toString(16);
-			$scope.lines.push({message: "Alice a3 = random "+ str.substring(0,10)+"...", descr: linebrk(str, 64)});			
-			//$scope.$apply();
+			$scope.lines.push({message: "Alice a3 = "+ str.substring(0,10)+"...", descr: linebrk(str, 64)});
+			$scope.lines.push({message: "Alice computes g2a = g1 ^ a2 MOD p", descr: ""});
 		}).then(function(){
-			console.log("4");
-			$scope.lines.push({message: "Alice g2a = modPow", descr: ""});
+			console.log("g2a");
 			/*g2a = g1.modPow(a2, p)
 			str = g2a.toString(16);
 			$scope.lines.push({message: "Alice g2a = "+ str.substring(0,10)+"...", descr: linebrk(str, 64)});*/
 			//$scope.lines.push({message: linebrk(hex2b64(nextRandom.toString(16)), 64)});
 		});
 	};
+	
+    $scope.altstart  = function() {
+		var a2, a3, g2a, str;
+		
+		var pHex = b64tohex(pStr);
+		var p = new BigInteger(pHex, 16);
+		var g1 = new BigInteger("02", 16);
+		$scope.lines.push({message: "Given p = 1536 bits prime and g1 = "+g1.toString(10), descr: pHex});
+		$scope.lines.push({message: "Alice picks random exponent a2...", descr: ""});
+		$timeout(function(){
+			console.log("a2");
+			a2 = new BigInteger(1536,1,new SecureRandom());
+			var str = a2.toString(16);
+			$scope.lines.push({message: "Alice a2 = "+ str.substring(0,10)+"...", descr: linebrk(str, 64)});
+			$scope.lines.push({message: "Alice picks random exponent a3...", descr: ""});
+			$timeout(function(){
+				console.log("a3");
+				a3 = new BigInteger(1536,1,new SecureRandom());
+				str = a3.toString(16);
+				$scope.lines.push({message: "Alice a3 = "+ str.substring(0,10)+"...", descr: linebrk(str, 64)});
+				$scope.lines.push({message: "Alice computes g2a = g1 ^ a2 MOD p", descr: ""});
+				$timeout(function(){
+					console.log("g2a");
+					g2a = g1.modPow(5, 6);
+					/*g2a = g1.modPow(a2, p);
+					str = g2a.toString(16);
+					$scope.lines.push({message: "Alice g2a = "+ str.substring(0,10)+"...", descr: linebrk(str, 64)});*/
+					//$scope.lines.push({message: linebrk(hex2b64(nextRandom.toString(16)), 64)});				
+				}, 10);
+			}, 10);
+		}, 10);
+	};	
 	
     $scope.clear = function() {
 		var bi = new BigInteger(modpStr, 16);
